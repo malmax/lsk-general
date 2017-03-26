@@ -5,6 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "core-decorators": "^0.15.0",
+    "file-loader": "^0.10.1",
     "glob-loader": "0.3.0",
     "highlight.js": "^9.8.0",
     "importcss": "^1.0.3",
