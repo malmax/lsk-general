@@ -36,5 +36,15 @@ module.exports = function ({ storiesOf, action }) {
           badge="http://www.iconsdb.com/icons/preview/orange/new-badge-3-xxl.png"
         />
       </div>
+    ))
+    .add('high resolution', () => (
+      <div>
+        <Avatar
+          img={'myavatar.jpg'}
+          username="avatar"
+          placeholder="loading.gif"
+          avatarHighSrc="http://www.placehold.it/1000?text=High+Resolution+Image"
+        />
+      </div>
     ));
 };

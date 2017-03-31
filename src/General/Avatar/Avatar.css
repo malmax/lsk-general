@@ -1,4 +1,12 @@
 .Avatar_image {
-  max-width: 200px;
   max-height: 200px;
+  position: relative;
+}
+
+.Avatar_badge {
+  position: absolute;
+  max-width: 20%;
+  height: auto;
+  bottom: 5%;
+  right: 10%;
 }
