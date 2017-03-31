@@ -1,6 +1,23 @@
-.Avatar_image {
-  max-height: 200px;
+.Avatar_container {
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  margin: 10px;
   position: relative;
+}
+
+.Avatar_image {
+  position: absolute;
+  margin: auto;
+  min-height: 100%;
+  min-width: 100%;
+
+    /* For the following settings we set 100%, but it can be higher if needed
+    See the answer's update */
+  left: -100%;
+  right: -100%;
+  top: -100%;
+  bottom: -100%;
 }
 
 .Avatar_badge {
@@ -8,5 +25,30 @@
   max-width: 20%;
   height: auto;
   bottom: 5%;
-  right: 10%;
+  left: 5%;
+}
+
+.Avatar_border {
+  border: 5px solid gray;
+  border-radius: 10%;
+}
+
+.Avatar_border_active {
+  border-color: #337ab7;
+}
+
+.Border_circle {
+  border-radius: 50%
+}
+
+.Gray_Filter {
+  -webkit-filter: grayscale(1); /* Webkit браузеры */
+  filter: gray; /* для IE6-9 */
+  filter: grayscale(1); /* W3C */
+}
+
+.Shadow {
+  -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+  moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+  box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
 }
