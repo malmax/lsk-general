@@ -63,7 +63,7 @@ export default class Avatar extends Component {
       'Gray_Filter': props.grayFilter,
       'Border_circle': props.borderCircle
     });
-    console.log(props.border, this.avatarStyles);
+    // console.log(props.border, this.avatarStyles);
   }
 
   componentDidMount() {
