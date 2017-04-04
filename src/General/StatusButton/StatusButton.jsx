@@ -1,8 +1,9 @@
 import React, {Component, PropTypes} from 'react';
 import importcss from 'importcss';
 import cx from 'classnames';
-import { Button } from 'react-bootstrap';
+// import { Button } from 'react-bootstrap';
 import _ from 'lodash';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 const ButtonStatus = {
   none: 'none',
@@ -47,17 +48,12 @@ export default class StatusButton extends Component {
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.status != this.state.status) {
-      console.log(nextProps.loading);
       this.setState({
         loading: nextProps.status == ButtonStatus.loading,
         success: nextProps.status == ButtonStatus.success,
         error: nextProps.status == ButtonStatus.error,
       });
     }
-  }
-
-  setStatus(loading=false, error=false, success=false) {
-
   }
 
   render() {
@@ -88,9 +84,15 @@ export default class StatusButton extends Component {
     }
 
     return (
-      <button styleName={classNames} onClick={this.props.click}>
-        {content}
-      </button>
+      <ReactCSSTransitionGroup
+          transitionName="example"
+          styleName={'button-animate'}
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={1300}>
+          <button styleName={classNames} onClick={this.props.click}>
+            {content}
+          </button>
+        </ReactCSSTransitionGroup>
     );
   }
 }
