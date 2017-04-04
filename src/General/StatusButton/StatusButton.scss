@@ -162,6 +162,7 @@
 
 .loading {
   opacity: 0.8;
+  min-width: 100px;
   text-align: center;
   color: rgba(0, 0, 0, 0);
   text-shadow: none;
@@ -231,22 +232,18 @@
 
 
 @keyframes loading-line {
-  0% {
-    width: 0;
-  }
-  40% {
-    width: 40%;
-  }
-  50% {
-    width: 43%;
-  }
-  60% {
-    width: 46%;
-  }
-  70% {
-    width: 50%;
-  }
-  100% {
-    width: 100%;
-  }
+  0% { width: 0; }
+  40% { width: 40%; }
+  50% { width: 43%; }
+  60% { width: 46%; }
+  70% { width: 50%; }
+  100% { width: 100%; }
+}
+
+.error {
+  color: darkred;
+
+  -webkit-transition: color 1s ease-in-out, width 1s linear;
+  -ms-transition: color 1s ease-in-out, width 1s linear;
+  transition: color 1s ease-in-out, width 1s linear;
 }

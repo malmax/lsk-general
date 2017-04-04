@@ -1,5 +1,5 @@
 import React from 'react';
-import {Grid, Col} from 'react-bootstrap';
+import { linkTo } from '@kadira/storybook';
 import StatusButton from './StatusButton';
 
 const WrapBootsrstap = props => (
@@ -54,7 +54,6 @@ module.exports = function({storiesOf, action}) {
       });
     })
     .add('rounded buttons', () => {
-
       return colors.map((item, index) => {
         return (
           <div style={{flex: '0 1 auto', margin: '0 2em'}}>
@@ -64,27 +63,50 @@ module.exports = function({storiesOf, action}) {
           </div>
         );
       });
-    })
-    .add('loading', () => {
-      let loadingToggle = false;
+    }).add('statuses', () => {
+        return (
+          <div>
+            <div style={{flex: '0 1 auto', margin: '5em 2em'}}>
+              <StatusButton color="green-sea" rounded >
+                  Быстрый заказ
+              </StatusButton>
+            </div>
 
-      const handleClick = (target) => {
-          action('target')(target);
-          loadingToggle = !loadingToggle;
-      };
+            <div style={{flex: '0 1 auto', margin: '5em 2em'}}>
+              <StatusButton color="green-sea" rounded status="loading">
+                  Быстрый заказ
+              </StatusButton>
+            </div>
 
-      return (
-        <div>
+            <div style={{flex: '0 1 auto', margin: '5em 2em'}}>
+              <StatusButton color="green-sea" rounded status="success">
+                  Быстрый заказ
+              </StatusButton>
+            </div>
+
+            <div style={{flex: '0 1 auto', margin: '5em 2em'}}>
+              <StatusButton color="green-sea" rounded status="error">
+                  Быстрый заказ
+              </StatusButton>
+            </div>
+          </div>
+        );
+    }).add('click me', () => {
+        return (
           <div style={{flex: '0 1 auto', margin: '5em 2em'}}>
-            <StatusButton color="peter-river" rounded click={handleClick} loading={loadingToggle}>
+            <StatusButton color="peter-river" rounded click={linkTo('StatusButton', 'loading')}>
                 Добавить в корзину
             </StatusButton>
           </div>
-          <div style={{flex: '0 1 auto', margin: '5em 2em'}}>
-            <StatusButton color="green-sea" rounded loading click={action('click')}>
-                Отправить форму
-            </StatusButton>
-          </div>
-        </div>);
+        );
+    }).add('loading', () => {
+
+      return (
+        <div style={{flex: '0 1 auto', margin: '5em 2em'}}>
+          <StatusButton color="peter-river" rounded status='loading' click={action('click')}>
+              Добавить в корзину
+          </StatusButton>
+        </div>
+        );
     });
 };

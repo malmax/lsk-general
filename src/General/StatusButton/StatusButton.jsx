@@ -23,15 +23,14 @@ export default class StatusButton extends Component {
   static propTypes = {
     color: PropTypes.string,
     rounded: PropTypes.bool,
-    loading: PropTypes.bool,
-    // status: PropTypes.oneOf(Object.keys(ButtonStatus)),
+    status: PropTypes.oneOf(Object.keys(ButtonStatus)),
     click: PropTypes.func,
   }
 
   static defaultProps = {
     color: 'orange',
     rounded: false,
-    // status: ButtonStatus[0],
+    status: ButtonStatus[0],
     loading: false
   }
 
@@ -39,15 +38,21 @@ export default class StatusButton extends Component {
     super();
 
     this.state = {
-      loading: props.loading,
+      loading: props.status == ButtonStatus.loading,
+      success: props.status == ButtonStatus.success,
+      error: props.status == ButtonStatus.error,
       color: _.includes(ButtonColor, props.color) ? props.color : ButtonColor[0],
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.loading != this.state.loading) {
+    if(nextProps.status != this.state.status) {
       console.log(nextProps.loading);
-      this.setState({ loading: nextProps.loading });
+      this.setState({
+        loading: nextProps.status == ButtonStatus.loading,
+        success: nextProps.status == ButtonStatus.success,
+        error: nextProps.status == ButtonStatus.error,
+      });
     }
   }
 
@@ -59,23 +64,32 @@ export default class StatusButton extends Component {
     const classNames = cx(`${this.state.color}-button`, {
       'rounded' : this.props.rounded,
       'loading' : this.state.loading,
+      'success' : this.state.success,
+      'error' : this.state.error,
     });
 
-    let addContent = '';
-    switch (this.state.status) {
-      case ButtonStatus.loading:
-        addContent = <div styleName="bounces">
-          <div styleName="bounce1 bounce"></div>
-          <div styleName="bounce2 bounce"></div>
-          <div styleName="bounce3 bounce"></div>
-        </div>;
-        break;
+    let content = this.props.children;
 
+    switch (this.props.status) {
+      case ButtonStatus.loading:
+        content =
+          <div>
+            {this.props.children}
+            <div styleName="bounces">
+              <div styleName="bounce1 bounce"></div>
+              <div styleName="bounce2 bounce"></div>
+              <div styleName="bounce3 bounce"></div>
+            </div>
+          </div>;
+        break;
+      case ButtonStatus.error:
+        content = "Ошибка";
+        break;
     }
 
     return (
       <button styleName={classNames} onClick={this.props.click}>
-        {this.props.children}{addContent}
+        {content}
       </button>
     );
   }
