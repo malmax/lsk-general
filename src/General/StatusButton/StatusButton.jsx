@@ -2,6 +2,9 @@ import React, {Component, PropTypes} from 'react';
 import importcss from 'importcss';
 import cx from 'classnames';
 import _ from 'lodash';
+import ErrorIcon from 'react-icons/lib/md/error-outline';
+import DoneIcon from 'react-icons/lib/md/done';
+
 // import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 const ButtonStatus = {
@@ -26,6 +29,7 @@ export default class StatusButton extends Component {
     rounded: PropTypes.bool,
     status: PropTypes.oneOf(Object.keys(ButtonStatus)),
     click: PropTypes.func,
+    resolve: PropTypes.any
   }
 
   static defaultProps = {
@@ -44,17 +48,27 @@ export default class StatusButton extends Component {
       error: props.status == ButtonStatus.error,
       color: _.includes(ButtonColor, props.color) ? props.color : ButtonColor[0],
       errorMsg: 'Повторите запрос позже',
+      successMsg: ''
+    }
+
+    // promise
+    if(props.resolve) {
+      props.resolve
+        .then(txt => this.setState({loading: false, success: true, error: false, successMsg: txt}))
+        .catch(txt => this.setState({loading: false, success: false, error: true, errorMsg: txt}))
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.status != this.state.status) {
+    console.log(nextProps);
+    
       this.setState({
         loading: nextProps.status == ButtonStatus.loading,
         success: nextProps.status == ButtonStatus.success,
         error: nextProps.status == ButtonStatus.error,
       });
-    }
+
+
   }
 
 
@@ -82,14 +96,20 @@ export default class StatusButton extends Component {
         break;
       case ButtonStatus.error:
         content = (<div>
-                    <div>{"произошла ошибка"}</div>
+                    <div><ErrorIcon size={40} color="#b53224" /> ошибка</div>
                     <div styleName="tooltip">{this.state.errorMsg}</div>
+                  </div>);
+        break;
+      case ButtonStatus.success:
+        content = (<div>
+                    <div><DoneIcon size={50} /></div>
+                    <div styleName="tooltip">{this.state.successMsg}</div>
                   </div>);
         break;
     }
 
     return (
-          <button styleName={classNames} onClick={this.props.click}>
+          <button styleName={classNames} onClick={this.props.click} >
             {content}
           </button>
     );

@@ -1,5 +1,6 @@
 import React from 'react';
 import { linkTo } from '@kadira/storybook';
+import Cart from 'react-icons/lib/md/shopping-cart';
 import StatusButton from './StatusButton';
 
 const WrapBootsrstap = props => (
@@ -94,11 +95,14 @@ module.exports = function ({ storiesOf, action }) {
         </div>
       );
     })
-    .add('click me', () => {
+    .add('Promise.Error', () => {
       return (
         <div style={{ flex: '0 1 auto', margin: '5em 2em' }}>
-          <StatusButton color="peter-river" rounded click={linkTo('StatusButton', 'loading')}>
-                Добавить в корзину
+          <StatusButton
+            color="peter-river"
+            rounded
+            resolve={new Promise((res, rej) => setTimeout(rej.bind(null, 'тестовая ошибка'), 3000))}>
+                <Cart size={40} /> В КОРЗИНУ
             </StatusButton>
         </div>
       );
