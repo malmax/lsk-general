@@ -1,9 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import importcss from 'importcss';
 import cx from 'classnames';
-// import { Button } from 'react-bootstrap';
 import _ from 'lodash';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+// import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 const ButtonStatus = {
   none: 'none',
@@ -18,7 +17,8 @@ const ButtonColor = [
   'midnight-blue', 'clouds', 'silver', 'concrete', 'asbestos', 'graphite'
 ];
 
-@importcss(require('./StatusButton.scss'))
+
+@importcss(require('./StatusButton.scss')) // eslint-disable-nextline
 export default class StatusButton extends Component {
 
   static propTypes = {
@@ -43,6 +43,7 @@ export default class StatusButton extends Component {
       success: props.status == ButtonStatus.success,
       error: props.status == ButtonStatus.error,
       color: _.includes(ButtonColor, props.color) ? props.color : ButtonColor[0],
+      errorMsg: 'Повторите запрос позже',
     }
   }
 
@@ -56,6 +57,7 @@ export default class StatusButton extends Component {
     }
   }
 
+
   render() {
     const classNames = cx(`${this.state.color}-button`, {
       'rounded' : this.props.rounded,
@@ -64,35 +66,32 @@ export default class StatusButton extends Component {
       'error' : this.state.error,
     });
 
+
     let content = this.props.children;
 
     switch (this.props.status) {
       case ButtonStatus.loading:
-        content =
-          <div>
-            {this.props.children}
-            <div styleName="bounces">
-              <div styleName="bounce1 bounce"></div>
-              <div styleName="bounce2 bounce"></div>
-              <div styleName="bounce3 bounce"></div>
-            </div>
-          </div>;
+        content =(<div>
+                    {this.props.children}
+                    <div styleName="bounces">
+                      <div styleName="bounce1 bounce"></div>
+                      <div styleName="bounce2 bounce"></div>
+                      <div styleName="bounce3 bounce"></div>
+                    </div>
+                  </div>);
         break;
       case ButtonStatus.error:
-        content = "Ошибка";
+        content = (<div>
+                    <div>{"произошла ошибка"}</div>
+                    <div styleName="tooltip">{this.state.errorMsg}</div>
+                  </div>);
         break;
     }
 
     return (
-      <ReactCSSTransitionGroup
-          transitionName="example"
-          styleName={'button-animate'}
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={1300}>
           <button styleName={classNames} onClick={this.props.click}>
             {content}
           </button>
-        </ReactCSSTransitionGroup>
     );
   }
 }
