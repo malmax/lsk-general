@@ -101,18 +101,23 @@ module.exports = function ({ storiesOf, action }) {
           <StatusButton
             color="peter-river"
             rounded
-            resolve={new Promise((res, rej) => setTimeout(rej.bind(null, 'тестовая ошибка'), 3000))}>
-                <Cart size={40} /> В КОРЗИНУ
+            resolve={new Promise((res, rej) => setTimeout(rej.bind(null, 'тестовая ошибка'), 4000))}
+          >
+            <Cart size={35} />В КОРЗИНУ
             </StatusButton>
         </div>
       );
     })
-    .add('loading', () => {
+    .add('Promise.Success', () => {
       return (
         <div style={{ flex: '0 1 auto', margin: '5em 2em' }}>
-          <StatusButton color="peter-river" rounded status="loading" click={action('click')}>
-              Добавить в корзину
-          </StatusButton>
+          <StatusButton
+            color="peter-river"
+            rounded
+            resolve={new Promise((res, rej) => setTimeout(res.bind(null, 'товар в корзине'), 4000))}
+          >
+            <Cart size={35} />В КОРЗИНУ
+            </StatusButton>
         </div>
       );
     });

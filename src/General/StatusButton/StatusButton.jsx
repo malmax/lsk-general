@@ -4,8 +4,7 @@ import cx from 'classnames';
 import _ from 'lodash';
 import ErrorIcon from 'react-icons/lib/md/error-outline';
 import DoneIcon from 'react-icons/lib/md/done';
-
-// import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 const ButtonStatus = {
   none: 'none',
@@ -43,7 +42,7 @@ export default class StatusButton extends Component {
     super();
 
     this.state = {
-      loading: props.status == ButtonStatus.loading,
+      loading: props.status == ButtonStatus.loading || props.resolve,
       success: props.status == ButtonStatus.success,
       error: props.status == ButtonStatus.error,
       color: _.includes(ButtonColor, props.color) ? props.color : ButtonColor[0],
@@ -51,24 +50,36 @@ export default class StatusButton extends Component {
       successMsg: ''
     }
 
+
+  }
+
+  componentDidMount() {
     // promise
-    if(props.resolve) {
-      props.resolve
-        .then(txt => this.setState({loading: false, success: true, error: false, successMsg: txt}))
-        .catch(txt => this.setState({loading: false, success: false, error: true, errorMsg: txt}))
+    if(this.props.resolve) {
+      this.props.resolve
+        .then(txt => this.setState({
+          loading: false,
+          success: true,
+          error: false,
+          successMsg: txt
+        }))
+        .catch(txt => {
+          this.setState({
+            loading: false,
+            success: false,
+            error: true,
+            errorMsg: txt
+          });
+        })
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
-    
-      this.setState({
-        loading: nextProps.status == ButtonStatus.loading,
-        success: nextProps.status == ButtonStatus.success,
-        error: nextProps.status == ButtonStatus.error,
-      });
-
-
+      // this.setState({
+      //   loading: nextProps.status == ButtonStatus.loading,
+      //   success: nextProps.status == ButtonStatus.success,
+      //   error: nextProps.status == ButtonStatus.error,
+      // });
   }
 
 
@@ -83,35 +94,37 @@ export default class StatusButton extends Component {
 
     let content = this.props.children;
 
-    switch (this.props.status) {
-      case ButtonStatus.loading:
-        content =(<div>
-                    {this.props.children}
-                    <div styleName="bounces">
-                      <div styleName="bounce1 bounce"></div>
-                      <div styleName="bounce2 bounce"></div>
-                      <div styleName="bounce3 bounce"></div>
-                    </div>
-                  </div>);
-        break;
-      case ButtonStatus.error:
-        content = (<div>
-                    <div><ErrorIcon size={40} color="#b53224" /> ошибка</div>
-                    <div styleName="tooltip">{this.state.errorMsg}</div>
-                  </div>);
-        break;
-      case ButtonStatus.success:
-        content = (<div>
-                    <div><DoneIcon size={50} /></div>
-                    <div styleName="tooltip">{this.state.successMsg}</div>
-                  </div>);
-        break;
+    if(this.state.loading) {
+      content =(<div>
+                  {this.props.children}
+                  <div styleName="bounces">
+                    <div styleName="bounce1 bounce"></div>
+                    <div styleName="bounce2 bounce"></div>
+                    <div styleName="bounce3 bounce"></div>
+                  </div>
+                </div>);
+    } else if(this.state.error) {
+      content = (<div>
+                  <div><ErrorIcon size={30} color="#b53224" /> ошибка</div>
+                  <div styleName="tooltip">{this.state.errorMsg}</div>
+                </div>);
+    } else if (this.state.success) {
+      content = (<div>
+                  <div><DoneIcon size={50} /></div>
+                  <div styleName="tooltip">{this.state.successMsg}</div>
+                </div>);
     }
 
     return (
-          <button styleName={classNames} onClick={this.props.click} >
-            {content}
-          </button>
+        <ReactCSSTransitionGroup
+            transitionName="example"
+            transitionEnterTimeout={500}
+            transitionLeaveTimeout={300}>
+            <button styleName={classNames} onClick={this.props.click} >
+              {content}
+            </button>
+          </ReactCSSTransitionGroup>
+
     );
   }
 }
