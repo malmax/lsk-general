@@ -2,6 +2,10 @@ import React from 'react';
 import { linkTo } from '@kadira/storybook';
 import Cart from 'react-icons/lib/md/shopping-cart';
 import StatusButton from './StatusButton';
+import AddToCart from '../AddToCart';
+
+const fetchFile = require("file-loader!./fetchRequest.txt");
+console.log(fetchFile);
 
 const WrapBootsrstap = props => (
   <div
@@ -98,13 +102,7 @@ module.exports = function ({ storiesOf, action }) {
     .add('Promise.Error', () => {
       return (
         <div style={{ flex: '0 1 auto', margin: '5em 2em' }}>
-          <StatusButton
-            color="peter-river"
-            rounded
-            resolve={new Promise((res, rej) => setTimeout(rej.bind(null, 'тестовая ошибка'), 4000))}
-          >
-            <Cart size={35} />В КОРЗИНУ
-            </StatusButton>
+          <AddToCart url={`http://localhost:9001${fetchFile}`} />
         </div>
       );
     })

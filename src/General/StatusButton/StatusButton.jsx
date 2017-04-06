@@ -75,11 +75,12 @@ export default class StatusButton extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-      // this.setState({
-      //   loading: nextProps.status == ButtonStatus.loading,
-      //   success: nextProps.status == ButtonStatus.success,
-      //   error: nextProps.status == ButtonStatus.error,
-      // });
+      this.setState({
+        loading: nextProps.status == ButtonStatus.loading  || nextProps.resolve,
+        success: nextProps.status == ButtonStatus.success,
+        error: nextProps.status == ButtonStatus.error,
+        color: _.includes(ButtonColor, nextProps.color) ? nextProps.color : ButtonColor[0],
+      });
   }
 
 
