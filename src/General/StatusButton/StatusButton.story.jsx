@@ -100,16 +100,20 @@ module.exports = function ({ storiesOf, action }) {
       );
     })
     .add('Promise.Success', () => {
+      console.log(window.location);
+      var match = window.location.href.match(/^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/);
+      // var match = window.location.href.match(window.location.href);
+
       return (
         <div style={{ flex: '0 1 auto', margin: '5em 2em' }}>
-          <AddToCart url={`http://localhost:9001${fetchFile}`} />
+          <AddToCart url={`correct url`} />
         </div>
       );
     })
     .add('Promise.Error', () => {
       return (
         <div style={{ flex: '0 1 auto', margin: '5em 2em' }}>
-          <AddToCart url={`http://localhost:9001${fetchFile}ERROR`} />
+          <AddToCart url={`incorect url`} />
         </div>
       );
     });

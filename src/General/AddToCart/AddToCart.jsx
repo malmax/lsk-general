@@ -30,16 +30,26 @@ export default class AddToCart extends Component {
     this.setState({
       resolve: new Promise(async (res, rej) => {
         const self = this;
+        console.log(self.props.url);
 
+        try {
         setTimeout(async () => {
+          // if(self.props.url == 'correct url') {
+          //   res('товар добавлен в корину');
+          // }
+          // else {
+          //   rej('произошла ошибка. попробуйте позже');
+          // }
           try {
             await fetch(self.props.url)
-              .then(res2 => {
-                if(res2.status != 200 || !(res2.text().trim())) {
+              .then(async res2 => {
+                const txt = await res2.text();
+                console.log(res2, txt);
+                if(res2.status != 200) {
                   rej('произошла ошибка. попробуйте повторить запрос позже');
                   return;
                 }
-                res(res2.text());
+                res(txt);
               })
               .catch(rej2 => rej(rej2))
           }
@@ -47,6 +57,10 @@ export default class AddToCart extends Component {
             rej('призошла ошибка');
           }
         }, 4000);
+      }
+      catch(e) {
+        rej('error')
+      }
       })
       // resolve:
     });
