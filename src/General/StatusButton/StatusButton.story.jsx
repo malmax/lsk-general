@@ -99,23 +99,17 @@ module.exports = function ({ storiesOf, action }) {
         </div>
       );
     })
-    .add('Promise.Error', () => {
+    .add('Promise.Success', () => {
       return (
         <div style={{ flex: '0 1 auto', margin: '5em 2em' }}>
           <AddToCart url={`http://localhost:9001${fetchFile}`} />
         </div>
       );
     })
-    .add('Promise.Success', () => {
+    .add('Promise.Error', () => {
       return (
         <div style={{ flex: '0 1 auto', margin: '5em 2em' }}>
-          <StatusButton
-            color="peter-river"
-            rounded
-            resolve={new Promise((res, rej) => setTimeout(res.bind(null, 'товар в корзине'), 4000))}
-          >
-            <Cart size={35} />В КОРЗИНУ
-            </StatusButton>
+          <AddToCart url={`http://localhost:9001${fetchFile}ERROR`} />
         </div>
       );
     });

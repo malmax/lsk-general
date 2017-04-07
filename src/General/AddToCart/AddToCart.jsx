@@ -28,8 +28,27 @@ export default class AddToCart extends Component {
 
   clickHandler({ target }) {
     this.setState({
-      resolve: new Promise((res, rej) => setTimeout(res.bind(null, 'товар в корзине'), 4000))
-      // resolve: fetch(this.props.url).then(res => res.text())
+      resolve: new Promise(async (res, rej) => {
+        const self = this;
+
+        setTimeout(async () => {
+          try {
+            await fetch(self.props.url)
+              .then(res2 => {
+                if(res2.status != 200 || !(res2.text().trim())) {
+                  rej('произошла ошибка. попробуйте повторить запрос позже');
+                  return;
+                }
+                res(res2.text());
+              })
+              .catch(rej2 => rej(rej2))
+          }
+          catch(e) {
+            rej('призошла ошибка');
+          }
+        }, 4000);
+      })
+      // resolve:
     });
   }
 

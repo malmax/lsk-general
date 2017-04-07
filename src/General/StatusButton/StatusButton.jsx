@@ -42,10 +42,12 @@ export default class StatusButton extends Component {
     super();
 
     this.state = {
-      loading: props.status == ButtonStatus.loading || props.resolve,
+      disabled: false,
+      loading: props.status == ButtonStatus.loading,
       success: props.status == ButtonStatus.success,
       error: props.status == ButtonStatus.error,
       color: _.includes(ButtonColor, props.color) ? props.color : ButtonColor[0],
+      resolve: props.resolve,
       errorMsg: 'Повторите запрос позже',
       successMsg: ''
     }
@@ -54,9 +56,40 @@ export default class StatusButton extends Component {
   }
 
   componentDidMount() {
+    // в assignOnPromise используется setState. Поэтому выносим его сюда
+    if(this.state.resolve) {
+      this.assignOnPromise(this.props.resolve);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // если кнопка не отключена, то меняем состояния от внешних пропсов
+    if(this.state.disabled) return;
+
+    this.setState({
+      loading: nextProps.status == ButtonStatus.loading,
+      success: nextProps.status == ButtonStatus.success,
+      error: nextProps.status == ButtonStatus.error,
+      color: _.includes(ButtonColor, nextProps.color) ? nextProps.color : ButtonColor[0],
+    });
+
+    if(nextProps.resolve  && !this.state.resolve) {
+      this.assignOnPromise(nextProps.resolve);
+    }
+  }
+
+  assignOnPromise(promise) {
     // promise
-    if(this.props.resolve) {
-      this.props.resolve
+    if(promise) {
+      // когда приходит промис, переходит в сотосяние loading
+      // и сохраняем промис в стэйт, чтобы не было потворного вызова
+      this.setState({
+        loading: true,
+        disabled: true, // запрещаем внешнее изменение через пропсы
+        resolve: promise
+      });
+
+      promise
         .then(txt => this.setState({
           loading: false,
           success: true,
@@ -72,15 +105,8 @@ export default class StatusButton extends Component {
           });
         })
     }
-  }
 
-  componentWillReceiveProps(nextProps) {
-      this.setState({
-        loading: nextProps.status == ButtonStatus.loading  || nextProps.resolve,
-        success: nextProps.status == ButtonStatus.success,
-        error: nextProps.status == ButtonStatus.error,
-        color: _.includes(ButtonColor, nextProps.color) ? nextProps.color : ButtonColor[0],
-      });
+    return promise;
   }
 
 
