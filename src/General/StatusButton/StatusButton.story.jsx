@@ -5,7 +5,7 @@ import StatusButton from './StatusButton';
 import AddToCart from '../AddToCart';
 
 const fetchFile = require("file-loader!./fetchRequest.txt");
-console.log(fetchFile);
+// console.log(fetchFile);
 
 const WrapBootsrstap = props => (
   <div
@@ -100,13 +100,11 @@ module.exports = function ({ storiesOf, action }) {
       );
     })
     .add('Promise.Success', () => {
-      console.log(window.location);
-      var match = window.location.href.match(/^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/);
-      // var match = window.location.href.match(window.location.href);
+      var match = window.location.href.match(/^(http:\/\/|https:\/\/).+\/(.+\/)*/);
 
       return (
         <div style={{ flex: '0 1 auto', margin: '5em 2em' }}>
-          <AddToCart url={`correct url`} />
+          <AddToCart url={`${match[0]}${fetchFile}`} />
         </div>
       );
     })

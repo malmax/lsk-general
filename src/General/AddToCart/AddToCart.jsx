@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import importcss from 'importcss';
-import fetch from 'node-fetch';
+import 'whatwg-fetch';
 import Cart from 'react-icons/lib/md/shopping-cart';
 import StatusButton from '../StatusButton';
 
@@ -28,41 +28,35 @@ export default class AddToCart extends Component {
 
   clickHandler({ target }) {
     this.setState({
-      resolve: new Promise(async (res, rej) => {
+      resolve: new Promise((res, rej) => {
         const self = this;
-        console.log(self.props.url);
+        console.log('fetch to',self.props.url);
 
-        try {
-        setTimeout(async () => {
-          // if(self.props.url == 'correct url') {
-          //   res('товар добавлен в корину');
-          // }
-          // else {
-          //   rej('произошла ошибка. попробуйте позже');
-          // }
+        setTimeout(() => {
+
           try {
-            await fetch(self.props.url)
-              .then(async res2 => {
-                const txt = await res2.text();
-                console.log(res2, txt);
-                if(res2.status != 200) {
-                  rej('произошла ошибка. попробуйте повторить запрос позже');
-                  return;
+            fetch(self.props.url)
+              .then(response => {
+                if (response.status >= 200 && response.status < 300) {
+                  return response;
+                } else {
+                  rej('нет соединения. попробуйте позже');
                 }
+              })
+              .then(async response => {
+                const txt = await response.text();
                 res(txt);
               })
-              .catch(rej2 => rej(rej2))
+              .catch(response => {
+                rej('попробуйте повторить запрос позже');
+              })
           }
           catch(e) {
             rej('призошла ошибка');
           }
         }, 4000);
-      }
-      catch(e) {
-        rej('error')
-      }
-      })
-      // resolve:
+
+    })
     });
   }
 
