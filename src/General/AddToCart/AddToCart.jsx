@@ -30,7 +30,7 @@ export default class AddToCart extends Component {
     this.setState({
       resolve: new Promise((res, rej) => {
         const self = this;
-        console.log('fetch to',self.props.url);
+        console.log('fetch to', self.props.url);
 
         setTimeout(() => {
 

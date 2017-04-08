@@ -4,7 +4,9 @@ import cx from 'classnames';
 import _ from 'lodash';
 import ErrorIcon from 'react-icons/lib/md/error-outline';
 import DoneIcon from 'react-icons/lib/md/done';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+// import '!!isomorphic-style!css?modules=false!./transition.css';
+import '!!style-loader/url!file-loader!./transition.css';
 
 const ButtonStatus = {
   none: 'none',
@@ -37,7 +39,8 @@ const ButtonColor = [
   'graphite'
 ];
 
-@importcss(require('./StatusButton.scss')) // eslint-disable-nextline
+const css = require('./StatusButton.scss');
+@importcss(css) // eslint-disable-nextline
 export default class StatusButton extends Component {
 
   static propTypes = {
@@ -56,7 +59,7 @@ export default class StatusButton extends Component {
   }
 
   constructor(props) {
-    super();
+    super(props);
 
     this.state = {
       disabled: false,
@@ -70,7 +73,6 @@ export default class StatusButton extends Component {
       errorMsg: 'Повторите запрос позже',
       successMsg: ''
     }
-
   }
 
   componentDidMount() {
@@ -119,7 +121,6 @@ export default class StatusButton extends Component {
           this.setState({loading: false, success: false, error: true, errorMsg: txt || ''});
         })
     }
-
     return promise;
   }
 
@@ -147,8 +148,7 @@ export default class StatusButton extends Component {
     } else if (this.state.error) {
       content = (
         <div>
-          <div><ErrorIcon size={30} color="#b53224"/>
-            ошибка</div>
+          <div><ErrorIcon size={30} color="#b53224" /> ошибка</div>
           <If condition={this.state.errorMsg}>
             <div styleName="tooltip">{this.state.errorMsg}</div>
           </If>
@@ -164,13 +164,20 @@ export default class StatusButton extends Component {
         </div>
       );
     }
-
+    const key = `${content}${this.state.loading}${this.state.success}${this.state.error}`;
     return (
-      <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={500} transitionLeaveTimeout={300}>
-        <button styleName={classNames} onClick={this.props.click}>
-          {content}
-        </button>
-      </ReactCSSTransitionGroup>
+      <div style={{position: 'relative', textAlign: 'center'}}>
+        <ReactCSSTransitionGroup
+          transitionName="example"
+          transitionEnterTimeout={1000}
+          transitionLeaveTimeout={1000}>
+
+            <button styleName={classNames} onClick={this.props.click} key={key}>
+              {content}
+            </button>
+
+        </ReactCSSTransitionGroup>
+      </div>
 
     );
   }
